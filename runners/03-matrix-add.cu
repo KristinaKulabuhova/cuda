@@ -3,6 +3,9 @@
 
 #include <KernelMatrixAdd.cuh>
 
+using std::cout;
+using std::endl;
+
 int main() {
   float *d_A, *d_B, *d_C;
   size_t pitch;
@@ -29,9 +32,19 @@ int main() {
 
   cudaMemcpy2D(d_A, pitch, h_A, W * sizeof(float), W * sizeof(float), H, cudaMemcpyHostToDevice);
   cudaMemcpy2D(d_B, pitch, h_B, W * sizeof(float), W * sizeof(float), H, cudaMemcpyHostToDevice);
+  
+  cudaEvent_t start;
+  cudaEvent_t stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start);
 
   KernelMatrixAdd<<<n_blocks, block_size>>>(H, W, pitch, d_A, d_B, d_C);
 	cudaDeviceSynchronize();
+  cudaEventRecord(stop);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&time, start, stop);
+  std::cout << time << std::endl;
 
   cudaMemcpy2D(h_C, W * sizeof(float), d_C, pitch, W * sizeof(float), H, cudaMemcpyDeviceToHost);
 
