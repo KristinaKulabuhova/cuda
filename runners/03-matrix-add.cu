@@ -30,10 +30,10 @@ int main() {
   cudaMemcpy2D(d_A, pitch, h_A, W * sizeof(float), W * sizeof(float), H, cudaMemcpyHostToDevice);
   cudaMemcpy2D(d_B, pitch, h_B, W * sizeof(float), W * sizeof(float), H, cudaMemcpyHostToDevice);
 
-  KernelMatrixAdd<<<n_blocks, block_size>>>(H, W, pitch, A, B, C);
+  KernelMatrixAdd<<<n_blocks, block_size>>>(H, W, pitch, d_A, d_B, d_C);
 	cudaDeviceSynchronize();
 
-  cudaMemcpy2D(h_C, W * sizeof(float), d_C, pitch, W * sizeof(float), H, cudaMemcpyDeviceToHost));
+  cudaMemcpy2D(h_C, W * sizeof(float), d_C, pitch, W * sizeof(float), H, cudaMemcpyDeviceToHost);
 
   for (int row = 0; row < H; ++row) {
     for(int col = 0; col < W; ++col) {
