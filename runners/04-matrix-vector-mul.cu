@@ -3,7 +3,8 @@
 
 #include <MatrixVectorMul.cuh>
 
-const float TOLERANCE = 0.001f;
+using std::cout;
+using std::endl;
 
 void FillMatrix(float* mat, int W, int H, float value) {
 }
@@ -18,6 +19,7 @@ int main() {
   float *h_A = new float[W * H];
   float *h_v = new float[W];
   float *h_result = new float[W];
+  float time;
 
   for(int row = 0; row < H; ++row) {
     for(int col = 0; col < W; ++col) {
@@ -37,9 +39,20 @@ int main() {
 
   cudaMemcpy(d_A, h_A, W * H * sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(d_v, h_v, W * sizeof(float), cudaMemcpyHostToDevice);
+  
+  cudaEvent_t start;
+  cudaEvent_t stop;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+  cudaEventRecord(start);
 
   MatrixVectorMul<<<n_blocks, block_size>>>(H, W, d_A, d_v, d_result);
+  
   cudaDeviceSynchronize();
+  cudaEventRecord(stop);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&time, start, stop);
+  std::cout << time << std::endl;
 
   cudaMemcpy(h_result, d_result, W * sizeof(float), cudaMemcpyDeviceToHost);
 
