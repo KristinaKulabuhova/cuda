@@ -18,8 +18,8 @@ int main() {
 
   for(int row = 0; row < H; ++row) {
     for(int col = 0; col < W; ++col) {
-      d_A[row * W + col] = 1.0f;
-      d_B[row * W + col] = 2.0f;
+      h_A[row * W + col] = 1.0f;
+      h_B[row * W + col] = 2.0f;
     }
   }
 
