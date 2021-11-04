@@ -7,9 +7,9 @@ void MatrixVectorMul(int height, int width, float* matrix, float* vector, float*
 	const int stride_x = blockDim.x * gridDim.x;
 	const int stride_y = blockDim.y * gridDim.y;
 
-    for (int row = y; row < height; row += stride_row) {
+    for (int row = y; row < height; row += stride_y) {
         float* A_y = matrix + row * width;
-        for(int col = x; col < width; col += stride_col) {
+        for(int col = x; col < width; col += stride_x) {
             atomicAdd(&result[row], A_y[col] * vector[col]);
         }
 	}
