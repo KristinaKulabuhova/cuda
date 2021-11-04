@@ -11,6 +11,7 @@ int main() {
   size_t pitch;
   int W = 10000;
   int H = 10000;
+  float time;
 
   dim3 block_size{32, 32}; // max threads in block 1024
   dim3 n_blocks{(W + block_size.x - 1) / block_size.x, (H + block_size.y - 1) / block_size.y};
