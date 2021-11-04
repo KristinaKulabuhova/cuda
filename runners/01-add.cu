@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cassert>
 #include <iostream>
 
 using std::cout;
@@ -29,7 +30,7 @@ int main() {
   cudaEventCreate(&stop);
   cudaEventRecord(start);
 
-  KernelAdd<<<n_blocks, block_size>>>(numElements, x, y, sum);
+  KernelAdd<<<n_blocks, block_size>>>(N, x, y, sum);
 
   cudaEventRecord(stop);
   cudaEventSynchronize(stop);
