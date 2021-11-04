@@ -12,7 +12,7 @@ __global__ void KernelMatrixAdd(int height, int width, int pitch, float* A, floa
     float* B_y = reinterpret_cast<float*>(reinterpret_cast<char*>(B) + row * pitch);
     float* res_y = reinterpret_cast<float*>(reinterpret_cast<char*>(result) + row * pitch);
 
-    for(int col = x; col < width; col += stride_col) {
+    for(int col = x; col < width; col += stride_x) {
       res_y[col] = A_y[col] + B_y[col];
     }
 	}
